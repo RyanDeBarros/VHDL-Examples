@@ -1,12 +1,8 @@
-package common is
-    constant Tdelay_synch: time := 5 ns;
-end package common;
-
 library ieee;
 use ieee.std_logic_1164.all;
-use work.common.all;
 
 entity bus_module is
+    generic (Tdelay_synch: time);
     port (synch: inout std_ulogic; name: in string; start: in bit);
 end entity bus_module;
 

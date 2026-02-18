@@ -1,5 +1,10 @@
+package common is
+    constant Tdelay_synch: time := 5 ns;
+end package common;
+
 library ieee;
 use ieee.std_logic_1164.all;
+use work.common.all;
 
 entity test_bench is
 end entity test_bench;
@@ -13,12 +18,14 @@ architecture test_bus_module of test_bench is
 begin
     synch_control_pull_up: synch_control <= 'H';
     bus_module_1: entity work.bus_module(behavioural)
-        port map (
-            synch => synch_control,
-            name  => name_1,
-            start => start_1
-        );
+        generic map ( Tdelay_synch => Tdelay_synch )
+            port map (
+                synch => synch_control,
+                name  => name_1,
+                start => start_1
+                );
     bus_module_2: entity work.bus_module(behavioural)
+        generic map ( Tdelay_synch => Tdelay_synch )
         port map (
             synch => synch_control,
             name  => name_2,
@@ -31,7 +38,7 @@ begin
         
         wait until synch_control = 'H';
         start_1 <= '0' after 1 ns;
-        start_2 <= '0' after 2 * work.common.Tdelay_synch;
+        start_2 <= '0' after 2 * Tdelay_synch;
 
         wait until synch_control = 'H';
         wait for 1 ns;
